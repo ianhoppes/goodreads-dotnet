@@ -50,9 +50,8 @@ namespace Goodreads.Models.Response
 
         /// <summary>
         /// The list of works that are in this series.
-        /// Only populated if Goodreads returns it in the response.
         /// </summary>
-        public IReadOnlyList<Work> Works { get; private set; }
+        public IReadOnlyList<SeriesWork> SeriesWorks { get; private set; }
 
         internal string DebuggerDisplay
         {
@@ -76,40 +75,20 @@ namespace Goodreads.Models.Response
             PrimaryWorksCount = element.ElementAsInt("primary_work_count");
             IsNumbered = element.ElementAsBool("numbered");
 
+
             var seriesWorksElement = element.Element("series_works");
             if (seriesWorksElement != null)
             {
-                ParseSeriesWorks(seriesWorksElement);
-            }
-        }
-
-        /// <summary>
-        /// In order to make out API models less complicated than the mess that Goodreads responds with,
-        /// we merge the concept of "series works" and "works" by copying the only
-        /// useful piece of information (user position) to the work object.
-        /// </summary>
-        /// <param name="seriesWorksRootElement">The root element of the list of series works.</param>
-        private void ParseSeriesWorks(XElement seriesWorksRootElement)
-        {
-            var seriesWorkElements = seriesWorksRootElement.Descendants("series_work");
-            if (seriesWorkElements != null && seriesWorkElements.Count() > 0)
-            {
-                var works = new List<Work>();
+                var seriesWorkElements = seriesWorksElement.Descendants("series_work");
+                var seriesWorks = new List<SeriesWork>();
                 foreach (var seriesWorkElement in seriesWorkElements)
                 {
-                    var userPosition = seriesWorkElement.ElementAsString("user_position");
-
-                    var workElement = seriesWorkElement.Element("work");
-                    if (workElement != null)
-                    {
-                        var work = new Work();
-                        work.Parse(workElement);
-                        work.SetUserPosition(userPosition);
-                        works.Add(work);
-                    }
+                    var seriesWork = new SeriesWork();
+                    seriesWork.Parse(seriesWorkElement);
+                    seriesWorks.Add(seriesWork);
                 }
 
-                Works = works;
+                SeriesWorks = seriesWorks;
             }
         }
     }

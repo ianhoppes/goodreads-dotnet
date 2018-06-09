@@ -40,11 +40,6 @@ namespace Goodreads.Models.Response
         public BestBook BestBook { get; private set; }
 
         /// <summary>
-        /// If included in a list, this defines this work's position.
-        /// </summary>
-        public string UserPosition { get; private set; }
-
-        /// <summary>
         /// The number of reviews of this work.
         /// </summary>
         public int ReviewsCount { get; private set; }
@@ -158,11 +153,6 @@ namespace Goodreads.Models.Response
                     RatingDistribution = ratingDistribution;
                 }
             }
-        }
-
-        internal void SetUserPosition(string userPosition)
-        {
-            UserPosition = userPosition;
         }
     }
 }

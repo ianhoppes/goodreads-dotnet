@@ -28,7 +28,7 @@ namespace Goodreads.Clients
         /// </summary>
         /// <param name="authorId">The author to fetch the list of series for.</param>
         /// <returns>A list of series written by the author.</returns>
-        public async Task<IReadOnlyList<Series>> GetListByAuthorId(long authorId)
+        public async Task<IReadOnlyList<SeriesWork>> GetListByAuthorId(long authorId)
         {
             var parameters = new List<Parameter>
             {
@@ -43,20 +43,20 @@ namespace Goodreads.Clients
                     var content = response.Content;
                     if (!string.IsNullOrWhiteSpace(content))
                     {
-                        var document = XDocument.Parse(content);
-                        var series = document.XPathSelectElements("GoodreadsResponse/series_works/series_work/series");
-                        if (series != null && series.Count() > 0)
+                        var document    = XDocument.Parse(content);
+                        var seriesWorks = document.XPathSelectElements("GoodreadsResponse/series_works/series_work");
+                        if (seriesWorks != null && seriesWorks.Count() > 0)
                         {
-                            var seriesModels = new List<Series>();
-                            foreach (var seriesElement in series)
+                            var seriesWorkModels = new List<SeriesWork>();
+                            foreach (var seriesWorkElement in seriesWorks)
                             {
-                                var seriesModel = new Series();
-                                seriesModel.Parse(seriesElement);
-                                seriesModels.Add(seriesModel);
+                                var seriesWorkModel = new SeriesWork();
+                                seriesWorkModel.Parse(seriesWorkElement);
+                                seriesWorkModels.Add(seriesWorkModel);
                             }
 
                             // Goodreads returns way too many duplicates, group by them by id first.
-                            var grouped = seriesModels.GroupBy(x => x.Id);
+                            var grouped = seriesWorkModels.GroupBy(x => x.Series.Id);
                             var uniqueSeries = grouped.Select(x => x.First()).ToList();
 
                             return uniqueSeries;
@@ -77,7 +77,7 @@ namespace Goodreads.Clients
         /// </summary>
         /// <param name="workId">The work id to fetch the list of series for.</param>
         /// <returns>A list of series that this work appears in.</returns>
-        public async Task<IReadOnlyList<Series>> GetListByWorkId(long workId)
+        public async Task<IReadOnlyList<SeriesWork>> GetListByWorkId(long workId)
         {
             var parameters = new List<Parameter>
             {
@@ -93,18 +93,18 @@ namespace Goodreads.Clients
                     if (!string.IsNullOrWhiteSpace(content))
                     {
                         var document = XDocument.Parse(content);
-                        var series = document.XPathSelectElements("GoodreadsResponse/series_works/series_work/series");
-                        if (series != null && series.Count() > 0)
+                        var seriesWorkElements = document.XPathSelectElements("GoodreadsResponse/series_works/series_work");
+                        if (seriesWorkElements != null && seriesWorkElements.Count() > 0)
                         {
-                            var seriesModels = new List<Series>();
-                            foreach (var seriesElement in series)
+                            var seriesWorkModels = new List<SeriesWork>();
+                            foreach (var seriesWorkElement in seriesWorkElements)
                             {
-                                var seriesModel = new Series();
-                                seriesModel.Parse(seriesElement);
-                                seriesModels.Add(seriesModel);
+                                var seriesWorkModel = new SeriesWork();
+                                seriesWorkModel.Parse(seriesWorkElement);
+                                seriesWorkModels.Add(seriesWorkModel);
                             }
 
-                            return seriesModels;
+                            return seriesWorkModels;
                         }
                     }
                 }

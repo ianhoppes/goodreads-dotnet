@@ -10,7 +10,7 @@ namespace Goodreads.Tests
 
         public SeriesEndpointTests()
         {
-            SeriesEndpoint = Helper.GetAuthClient().Series;
+            SeriesEndpoint = Helper.GetClient().Series;
         }
 
         public class TheGetListByAuthorIdMethod : SeriesEndpointTests
@@ -18,10 +18,10 @@ namespace Goodreads.Tests
             [Fact]
             public async Task ReturnsSeries()
             {
-                var series = await SeriesEndpoint.GetListByAuthorId(38550);
+                var seriesWorks = await SeriesEndpoint.GetListByAuthorId(38550);
 
-                Assert.NotNull(series);
-                Assert.True(series.Count > 0);
+                Assert.NotNull(seriesWorks);
+                Assert.True(seriesWorks.Count > 0);
             }
 
             [Fact]
@@ -38,10 +38,10 @@ namespace Goodreads.Tests
             [Fact]
             public async Task ReturnsSeries()
             {
-                var series = await SeriesEndpoint.GetListByWorkId(8134945);
+                var seriesWorks = await SeriesEndpoint.GetListByWorkId(8134945);
 
-                Assert.NotNull(series);
-                Assert.True(series.Count > 0);
+                Assert.NotNull(seriesWorks);
+                Assert.True(seriesWorks.Count > 0);
             }
 
             [Fact]
@@ -63,8 +63,6 @@ namespace Goodreads.Tests
 
                 Assert.NotNull(series);
                 Assert.Equal(expectedSeriesId, series.Id);
-                Assert.NotNull(series.Works);
-                Assert.True(series.Works.Count > 0);
             }
 
             [Fact]

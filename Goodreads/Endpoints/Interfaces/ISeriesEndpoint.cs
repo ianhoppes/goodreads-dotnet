@@ -14,14 +14,14 @@ namespace Goodreads.Clients
         /// </summary>
         /// <param name="authorId">The author to fetch the list of series for.</param>
         /// <returns>A list of series written by the author.</returns>
-        Task<IReadOnlyList<Series>> GetListByAuthorId(long authorId);
+        Task<IReadOnlyList<SeriesWork>> GetListByAuthorId(long authorId);
 
         /// <summary>
         /// Get all the series that the given work is in.
         /// </summary>
         /// <param name="workId">The work id to fetch the list of series for.</param>
         /// <returns>A list of series that this work appears in.</returns>
-        Task<IReadOnlyList<Series>> GetListByWorkId(long workId);
+        Task<IReadOnlyList<SeriesWork>> GetListByWorkId(long workId);
 
         /// <summary>
         /// Gets detailed information about the series, including all the works that belong to it.
