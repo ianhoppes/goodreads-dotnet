@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -15,6 +15,11 @@
     <PackageLicenseUrl>https://github.com/adamkrogh/goodreads-dotnet/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>goodreads api netstandard2</PackageTags>
     <CodeAnalysisRuleSet>..\Goodreads.ruleset</CodeAnalysisRuleSet>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\builds\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
